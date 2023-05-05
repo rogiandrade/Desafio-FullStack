@@ -4,6 +4,9 @@
     align-items: center;
     gap: 30px; 
     flex-flow: column;
+    width: 100vw;
+    height: 100vh;
+    background-color: #C20000; 
 }
 
 .logincard{
@@ -35,13 +38,29 @@
     padding: 10px 40px;
 }
 
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    height: 52px;
+}
+
 h1{
     font-size: 45px;
 }
 
+a{
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: underline;
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: #000000; 
+}
+
 form{
     display: flex;
-    flex-flow: column;
+    flex-flow: wrap;
     justify-content: space-around;
     width: 100%;
     height: 280px;
