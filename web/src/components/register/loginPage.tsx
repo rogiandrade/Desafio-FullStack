@@ -1,14 +1,36 @@
 import { useEffect, useState } from "react";
-import Pikachu from "../styles/assets/pikachu.png"
+import Pikachu from "../../styles/assets/pikachu.png"
+import { useNavigate } from "react-router-dom";
+import { Loading } from "../alternatives/loading";
 
 export function LoginPage() {
+
+    const navigate = useNavigate();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isDisabled, setIsDisabled] = useState(true);
+    const [errorMessage] = useState('');
+    const [sloading, setSloading] = useState(false)
 
     function handleSubmit(e: SubmitEvent) {
         e.preventDefault();
+
+        fetch(`http://localhost:2812/login?username=${username}&password=${password}`)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                if (data.message === "User logged in successfully") {
+
+                    setSloading(true)
+
+                    navigate('/home');
+
+                    setSloading(false)
+                }
+            })
+            .catch((error) => console.error(error));
+
         setUsername('');
         setPassword('');
         setIsDisabled(true);
@@ -42,7 +64,7 @@ export function LoginPage() {
                 <div className="form">
                     <header>
                         <h1>Login</h1>
-                        <a href={`http://127.0.0.1:5173/sigin`}>Sign up</a>
+                        <a href={`http://127.0.0.1:5173/siginup`}>Sign up</a>
                     </header>
                     <form onSubmit={(e: any) => handleSubmit(e)}>
                         <div className="input-container">
@@ -65,10 +87,14 @@ export function LoginPage() {
                                 required
                             />
                         </div>
+                        {errorMessage && <div className="error-message">{errorMessage}</div>}
                         <button type="submit" disabled={isDisabled}>ENTER</button>
                     </form>
                 </div>
             </section>
+            <div>
+                {sloading && <Loading />}
+            </div>
         </div>
     )
 }

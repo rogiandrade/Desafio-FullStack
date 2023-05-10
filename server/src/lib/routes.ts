@@ -2,6 +2,11 @@ import { FastifyInstance } from "fastify";
 import { prisma } from "./prisma";
 import { z } from "zod";
 
+type UserData = {
+    username: string;
+    password: string;
+}
+
 export async function appRoutes(app: FastifyInstance) {
 
     app.get('/status', (req, res) => {
@@ -11,59 +16,56 @@ export async function appRoutes(app: FastifyInstance) {
     app.post('/signup', async (request, reply) => {
 
         const register = z.object({
-            firstname: z.string(),
-            lastname: z.string(),
-            username: z.string(),
-            password: z.string()
+          firstname: z.string().optional(),
+          lastname: z.string().optional(),
+          username: z.string(),
+          password: z.string()
         })
-
+      
         let userData;
-
+      
         try {
-            userData = register.parse(request.body);
+          userData = register.parse(request.body);
         } catch (error) {
-            if (typeof error === 'object' && error !== null && 'message' in error) {
-                reply.code(400).send(error.message);
-            } else {
-                reply.code(500).send('Internal Server Error');
-            }
-            return;
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          console.error(errorMessage);
+          reply.code(400).send(errorMessage);
+          return;
         }
-
+      
         const { firstname, lastname, username, password } = userData;
-
-        try {
-            await prisma.user.create({
-                data: {
-                    firstname,
-                    lastname,
-                    username,
-                    password
-                }
-            });
-        } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-            reply.code(400).send(errorMessage);
-            return;
+      
+        if (!firstname || !lastname || !username || !password) {
+          const errorMessage = 'Missing required fields';
+          console.error(errorMessage);
+          reply.code(400).send(errorMessage);
+          return;
         }
-
-
+      
+        console.log(firstname, lastname, username, password);
+      
+        await prisma.user.create({
+          data: {
+            firstname,
+            lastname,
+            username,
+            password
+          }
+        });
+      
         reply.send({ message: "User created successfully" });
-    });
-
-    const login = z.object({
-        username: z.string(),
-        password: z.string()
-    })
+      });
 
     app.get('/login', async (request, reply) => {
 
-        let userData;
+        let userData: UserData;
 
         try {
-            userData = login.parse(request.query);
+            userData = request.query as UserData;
         } catch (error: unknown) {
-            reply.code(400).send((error as Error).message);
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            console.error(errorMessage);
+            reply.code(400).send(errorMessage);
             return;
         }
 
@@ -71,12 +73,14 @@ export async function appRoutes(app: FastifyInstance) {
 
         const user = await prisma.user.findUnique({
             where: {
-                username
-            }
+                username,
+            },
         });
 
         if (!user || user.password !== password) {
-            reply.code(401).send({ message: "Invalid username or password" });
+            const errorMessage = 'Invalid username or password';
+            console.error(errorMessage);
+            reply.code(401).send({ message: errorMessage });
             return;
         }
 

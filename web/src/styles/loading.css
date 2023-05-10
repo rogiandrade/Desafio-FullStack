@@ -4,15 +4,12 @@
     align-items: center;
     width: 100vw;
     height: 100vh;
-    background-color: #151515;
+    background-color: #C20000;
 }
 
 .loading{
-    width: 200px;
-}
-
-.loading::before{
-    animation: rotation 1.5s linear infinite;
+    width: 150px;
+    animation: rotation 1s linear infinite;
     transform-origin: 50% 50%;
 }
 

@@ -1,5 +1,5 @@
 import { useLayoutEffect } from "react";
-import Pokeball from "../styles/assets/pokeball.svg"
+import Pokeball from "../../styles/assets/pokeball.svg"
 
 {/* this function makes the application loading animation */}
 export function Loading() {

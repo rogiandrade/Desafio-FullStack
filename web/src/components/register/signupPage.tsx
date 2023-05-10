@@ -1,16 +1,41 @@
 import { useEffect, useState } from "react";
-import Snorlax from "../styles/assets/snorlax.png"
+import { useNavigate } from "react-router-dom";
+import Snorlax from "../../styles/assets/snorlax.png"
 
 export function SignUpPage() {
+
+    const navigate = useNavigate();
 
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isDisabled, setIsDisabled] = useState(true);
+    const [error, setError] = useState('');
+    const [sloading, setSloading] = useState(false)
 
     function handleSubmit(e: SubmitEvent) {
         e.preventDefault();
+
+        fetch('http://localhost:2812/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ firstName, lastName, username, password })
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                if (data.message === "User created successfully") {
+                    setSloading(true)
+                    navigate('/home');
+                    setSloading(false)
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                setError(error.message);
+            });
+
         setFirstName('');
         setLastName('');
         setUsername('');
@@ -18,12 +43,12 @@ export function SignUpPage() {
         setIsDisabled(true);
     }
 
-    function handleChangeFirstName(event: { target: { value: string; }; }) {
-        setFirstName(event.target.value.charAt(0).toUpperCase() + event.target.value.substr(1).toLowerCase());
+    function handleChangeFirstName(event: { target: { value: string } }) {
+        setFirstName(event.target.value);
     }
-
-    function handleChangeLastName(event: { target: { value: string; }; }) {
-        setLastName(event.target.value.charAt(0).toUpperCase() + event.target.value.substr(1).toLowerCase());
+    
+    function handleChangeLastName(event: { target: { value: string } }) {
+        setLastName(event.target.value);
     }
 
     function handleChangeUsername(event: { target: { value: string; }; }) {
