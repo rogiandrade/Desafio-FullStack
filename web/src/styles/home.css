@@ -1,5 +1,39 @@
 .home{
+    display: flex;
     width: 100vw;
     height: 100vh;
-    background-color: #000000;
+    background-color: #C20000;
+}
+
+.headerHome{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100vw;
+    height: 100px;
+}
+
+.navbar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 750px;
+    gap: 50px;
+}
+
+ul{
+    display: flex;
+    list-style-type: none;
+    gap: 40px;
+    font-size: 23px;
+    font-weight: 600;
+    color: #F4F4F4;
+}
+
+.user{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 600px;
+    height: 100px;
 }
