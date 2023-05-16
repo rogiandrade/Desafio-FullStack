@@ -16,19 +16,26 @@ export function LoginPage() {
     function handleSubmit(e: SubmitEvent) {
         e.preventDefault();
 
-        fetch(`http://localhost:2812/login?username=${username}&password=${password}`)
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-                if (data.message === "User logged in successfully") {
-
-                    setSloading(true)
-
-                    navigate('/home');
-
-                    setSloading(false)
-                }
-            })
+        fetch('http://localhost:2812/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            if (data.message === 'User logged in successfully') {
+                const token = data.token;
+          
+                // Armazene o token no localStorage
+                localStorage.setItem('token', token);
+                setSloading(true)
+                navigate('/home');
+                setSloading(false);
+            }
+        })
             .catch((error) => console.error(error));
 
         setUsername('');

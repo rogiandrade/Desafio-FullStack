@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import jwt, { SignOptions } from 'jsonwebtoken';
+import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken';
 import { prisma } from "./prisma";
 import { z } from "zod";
 
@@ -9,23 +9,22 @@ declare module "fastify" {
   }
 }
 
-interface RouteParams {
-  id: string
-}
-
 type UserData = {
   username: string;
   password: string;
 }
 
-export async function authenticate(request: FastifyRequest, reply: FastifyReply) {
-
-  function getUserFromToken(authHeader: string) {
-    const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+function getUserFromToken(authHeader: string) {
+  const token = authHeader.split(' ')[1];
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET ?? secretKey) as { userId: string };
     return decoded;
+  } catch (error: any) {
+    throw new Error('Invalid token');
   }
-  
+}
+
+export async function authenticate(request: FastifyRequest, reply: FastifyReply) {
   try {
     const authHeader = request.headers.authorization;
     if (!authHeader) {
@@ -34,9 +33,8 @@ export async function authenticate(request: FastifyRequest, reply: FastifyReply)
 
     const user = await getUserFromToken(authHeader);
 
-    const decoded = jwt.verify(authHeader.split(' ')[1], process.env.JWT_SECRET as string) as { userId: string };
-    // Adicione o objeto decoded ao objeto de solicitação para que ele possa ser acessado em rotas subsequentes
-    request['user'] = decoded;
+    // Adicione o objeto user ao objeto de solicitação para que ele possa ser acessado em rotas subsequentes
+    request['user'] = user as { userId: string };
     return;
   } catch (error: any) {
     console.error(error.message);
@@ -95,11 +93,11 @@ export async function appRoutes(app: FastifyInstance) {
     reply.send({ message: "User created successfully" });
   });
 
-  app.get('/login', { preHandler: authenticate }, async (request, reply) => {
+  app.post('/login', async (request, reply) => {
     let userData: UserData;
 
     try {
-      userData = request.query as UserData;
+      userData = request.body as UserData;
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       console.error(errorMessage);
@@ -135,18 +133,40 @@ export async function appRoutes(app: FastifyInstance) {
     reply.send({ message: 'User logged in successfully', token });
   });
 
-  app.get('/users', async (request: FastifyRequest<{ Params: RouteParams }>, reply: FastifyReply) => {
-    const { id } = request.params
+  app.get('/users/:id', async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
     try {
+      const authHeader = request.headers.authorization;
+      if (!authHeader) {
+        throw new Error('Authorization header missing');
+      }
+  
+      const token = authHeader.split(' ')[1];
+      if (!token) {
+        throw new Error('Token missing');
+      }
+  
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default-secret') as JwtPayload;
+      const userId = decoded.userId as string;
+  
+      if (userId !== request.params.id) {
+        reply.status(403).send({ message: 'Access denied' });
+        return;
+      }
+  
       const user = await prisma.user.findUnique({
-        where: { id },
-      })
-      reply.send(user)
-    } catch (err) {
-      console.error(err)
-      reply.status(500).send({ message: 'Error fetching user.' })
+        where: { id: userId },
+      });
+  
+      if (user) {
+        reply.send({ username: user.username });
+      } else {
+        reply.status(404).send({ message: 'User not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      reply.status(500).send({ message: 'Error fetching user' });
     }
-  })
+  });
 
   // API routes
   const { request } = require('graphql-request')
@@ -173,6 +193,4 @@ export async function appRoutes(app: FastifyInstance) {
 
 }
 
-function getUserFromToken(authHeader: string) {
-  throw new Error("Function not implemented.");
-}
+

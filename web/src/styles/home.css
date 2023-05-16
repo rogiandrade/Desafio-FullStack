@@ -11,6 +11,8 @@
     align-items: center;
     width: 100vw;
     height: 100px;
+    background-color: #FFFFFF;
+    border-bottom: 15px solid #000000;
 }
 
 .navbar{
@@ -27,7 +29,7 @@ ul{
     gap: 40px;
     font-size: 23px;
     font-weight: 600;
-    color: #F4F4F4;
+    color: #C20000;
 }
 
 .user{
