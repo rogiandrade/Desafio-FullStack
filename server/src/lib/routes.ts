@@ -9,6 +9,14 @@ declare module "fastify" {
   }
 }
 
+// Armazene os tokens inválidos em uma lista negra (blacklist)
+const invalidTokens: string[] = [];
+
+// Função para invalidar um token específico
+function invalidateToken(token: string) {
+  invalidTokens.push(token);
+}
+
 type UserData = {
   username: string;
   password: string;
@@ -32,6 +40,11 @@ export async function authenticate(request: FastifyRequest, reply: FastifyReply)
     }
 
     const user = await getUserFromToken(authHeader);
+
+    // Verificar se o token está na lista negra (blacklist)
+    if (invalidTokens.includes(authHeader)) {
+      throw new Error('Token invalidated');
+    }
 
     // Adicione o objeto user ao objeto de solicitação para que ele possa ser acessado em rotas subsequentes
     request['user'] = user as { userId: string };
@@ -139,24 +152,24 @@ export async function appRoutes(app: FastifyInstance) {
       if (!authHeader) {
         throw new Error('Authorization header missing');
       }
-  
+
       const token = authHeader.split(' ')[1];
       if (!token) {
         throw new Error('Token missing');
       }
-  
+
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default-secret') as JwtPayload;
       const userId = decoded.userId as string;
-  
+
       if (userId !== request.params.id) {
         reply.status(403).send({ message: 'Access denied' });
         return;
       }
-  
+
       const user = await prisma.user.findUnique({
         where: { id: userId },
       });
-  
+
       if (user) {
         reply.send({ username: user.username });
       } else {
@@ -166,7 +179,7 @@ export async function appRoutes(app: FastifyInstance) {
       console.error('Error fetching user:', error);
       reply.status(500).send({ message: 'Error fetching user' });
     }
-  });
+  }); 
 
   // API routes
   const { request } = require('graphql-request')

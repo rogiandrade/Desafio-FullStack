@@ -4,61 +4,61 @@ import { useNavigate } from "react-router-dom";
 import { Loading } from "../alternatives/loading";
 
 export function LoginPage() {
-
     const navigate = useNavigate();
-
+  
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isDisabled, setIsDisabled] = useState(true);
     const [errorMessage] = useState('');
     const [sloading, setSloading] = useState(false)
-
+  
     function handleSubmit(e: SubmitEvent) {
-        e.preventDefault();
-
-        fetch('http://localhost:2812/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, password })
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log(data);
-            if (data.message === 'User logged in successfully') {
-                const token = data.token;
-          
-                // Armazene o token no localStorage
-                localStorage.setItem('token', token);
-                setSloading(true)
-                navigate('/home');
-                setSloading(false);
-            }
-        })
-            .catch((error) => console.error(error));
-
-        setUsername('');
-        setPassword('');
-        setIsDisabled(true);
-    }
-
-    function handleChangeUsername(event: { target: { value: string; }; }) {
-        setUsername(event.target.value.toLowerCase());
-    }
-
-    function handleChangePassword(event: { target: { value: string; }; }) {
-        setPassword(event.target.value.toLowerCase());
-    }
-
-    useEffect(() => {
-        if (password !== '' && username !== '') {
-            setIsDisabled(false);
-        } else {
-            setIsDisabled(true);
+      e.preventDefault();
+  
+      fetch('http://localhost:2812/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.message === 'User logged in successfully') {
+          const token = data.token;
+  
+          // Armazene o token no localStorage
+          localStorage.setItem('token', token);
+          setSloading(true)
+          navigate('/home');
+          setSloading(false);
         }
+      })
+      .catch((error) => console.error(error));
+  
+      setUsername('');
+      setPassword('');
+      setIsDisabled(true);
+    }
+  
+    function handleChangeUsername(event: { target: { value: string; }; }) {
+      setUsername(event.target.value.toLowerCase());
+    }
+  
+    function handleChangePassword(event: { target: { value: string; }; }) {
+      setPassword(event.target.value.toLowerCase());
+    }
+  
+    useEffect(() => {
+      if (password !== '' && username !== '') {
+        setIsDisabled(false);
+      } else {
+        setIsDisabled(true);
+      }
     }, [username, password]);
 
+  
     return (
         <div className="login">
             <img

@@ -1,9 +1,14 @@
 import * as Avatar from '@radix-ui/react-avatar';
 import UserPhoto from '../../styles/assets/userphoto.png';
 import { useEffect, useState } from 'react';
+import ErrorPage from '../alternatives/errorPage';
+import { useNavigate } from 'react-router-dom';
 
 export function Home() {
+  
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
+  const [error, setError] = useState(false);
 
   const userAvatar = () => (
     <Avatar.Root>
@@ -14,7 +19,6 @@ export function Home() {
 
   useEffect(() => {
     async function getUsername() {
-
       console.log('Cookies:', document.cookie);
 
       const cookieArray = document.cookie.split(';');
@@ -32,20 +36,30 @@ export function Home() {
             setUsername(data.username);
           } else {
             console.error('Error fetching user:', response.statusText);
-            // Lógica de tratamento do erro...
+            setError(true);
           }
         } catch (error) {
           console.error('Error fetching user:', error);
-          // Lógica de tratamento do erro...
+          setError(true);
         }
       } else {
         console.error('Token is missing');
-        // Lógica de tratamento do erro...
+        setError(true);
       }
     }
 
     getUsername();
   }, []);
+
+  function handleLogout() {
+    // Remova o token do localStorage
+    localStorage.removeItem('token');
+    navigate('/login');
+  }
+
+  if (error) {
+    return <ErrorPage />;
+  }
 
   return (
     <div className="home">
@@ -66,6 +80,7 @@ export function Home() {
         </div>
         <div className="user">
           <div>{username}</div>
+          <button onClick={handleLogout}>Logout</button>
           {userAvatar()}
         </div>
       </header>
