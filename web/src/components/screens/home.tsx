@@ -1,14 +1,20 @@
 import * as Avatar from '@radix-ui/react-avatar';
 import UserPhoto from '../../styles/assets/userphoto.png';
 import { useEffect, useState } from 'react';
-import ErrorPage from '../alternatives/errorPage';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../../lib/axios';
+import jwtDecode from 'jwt-decode';
+import Cookies from 'universal-cookie';
+
+interface TokenPayload {
+  userId: string;
+}
 
 export function Home() {
   
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
-  const [error, setError] = useState(false);
+  const [, setError] = useState(false);
 
   const userAvatar = () => (
     <Avatar.Root>
@@ -17,48 +23,49 @@ export function Home() {
     </Avatar.Root>
   );
 
-  useEffect(() => {
-    async function getUsername() {
-      console.log('Cookies:', document.cookie);
+  async function getUsername(token: string) {
+    try {
+      const decodedToken = jwtDecode<TokenPayload>(token);
+      const userId = decodedToken.userId;
 
-      const cookieArray = document.cookie.split(';');
-      const tokenKeyValue = cookieArray.find((cookie) => cookie.trim().startsWith('token='));
-      const token = tokenKeyValue ? tokenKeyValue.split('=')[1].trim() : '';
+      const response = await api.get(`http://localhost:2812/users/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-      if (token) {
-        try {
-          const response = await fetch(`http://localhost:2812/users/${userId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            setUsername(data.username);
-          } else {
-            console.error('Error fetching user:', response.statusText);
-            setError(true);
-          }
-        } catch (error) {
-          console.error('Error fetching user:', error);
-          setError(true);
-        }
+      if (response.status === 200) {
+        const { username } = response.data;
+        setUsername(username);
       } else {
-        console.error('Token is missing');
+        console.error('Error fetching user:', response.statusText);
         setError(true);
       }
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      setError(true);
     }
+  }
 
-    getUsername();
+  useEffect(() => {
+    const cookies = new Cookies();
+    const token = cookies.get('token');
+
+    if (token) {
+      getUsername(token);
+    } else {
+      console.error('Token is missing');
+      setError(true);
+    }
   }, []);
 
   function handleLogout() {
     // Remova o token do localStorage
     localStorage.removeItem('token');
-    navigate('/login');
-  }
 
-  if (error) {
-    return <ErrorPage />;
+    // Remova também o token do cookie
+    const cookies = new Cookies();
+    cookies.remove('token');
+
+    navigate('/login');
   }
 
   return (
