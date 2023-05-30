@@ -146,7 +146,7 @@ export async function appRoutes(app: FastifyInstance) {
     reply.send({ message: 'User logged in successfully', token });
   });
 
-  app.get('/users/:id', async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
+  app.get('/users', async (request , reply: FastifyReply) => {
     try {
       const authHeader = request.headers.authorization;
       if (!authHeader) {
@@ -159,15 +159,9 @@ export async function appRoutes(app: FastifyInstance) {
       }
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'default-secret') as JwtPayload;
-      const userId = decoded.userId as string;
-
-      if (userId !== request.params.id) {
-        reply.status(403).send({ message: 'Access denied' });
-        return;
-      }
 
       const user = await prisma.user.findUnique({
-        where: { id: userId },
+        where: { username: decoded.username },
       });
 
       if (user) {
