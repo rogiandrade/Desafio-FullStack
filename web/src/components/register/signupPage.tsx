@@ -82,7 +82,10 @@ export function SignUpPage() {
         <div className="form">
           <header>
             <h1>Sign up</h1>
-            <a href={`http://127.0.0.1:5173/login`}>Login</a>
+            <a
+              className="register"
+              href={`http://127.0.0.1:5173/login`}
+            >Login</a>
           </header>
           <form className="signupform" onSubmit={(e: any) => handleSubmit(e)}>
             <div className="input-namecontainer">
