@@ -1,18 +1,19 @@
-.home{
+#home{
+    position: absolute;
     display: flex;
-    width: 100vw;
-    height: 100vh;
-    background-color: #C20000;
+    flex-flow: column;
+    align-items: center;
+    width: 100%;
+    height: 1800px;
+    background-color: #AB0202;
 }
 
 .headerHome{
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    width: 100vw;
+    width: 95%;
     height: 100px;
-    background-color: #FFFFFF;
-    border-bottom: 15px solid #000000;
 }
 
 .navbar{
@@ -29,17 +30,193 @@ ul{
     gap: 40px;
     font-size: 23px;
     font-weight: 600;
-    color: #C20000;
+    color: #F4F4F4;
+    text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.212)
+}
+
+li{
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+li:hover{
+    opacity: 80%;
+}
+
+a{
+    text-decoration: none;
+    font-size: 23px;
+    font-weight: 600;
+    color: #F4F4F4;
 }
 
 .user{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 600px;
+    width: 300px;
     height: 100px;
+}
+
+.username{
+    width: 160px;
+    font-size: 21px;
+    font-weight: 600;
+    color: #151515;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.username:hover{
+    opacity: 80%;
 }
 
 /*.logout{
     width: 100px;
 }*/
+
+.content{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 1300px;
+    height: 600px;
+}
+
+.textcontent{
+    display: flex;
+    flex-flow: column;
+    gap: 15px;
+}
+
+.hometitle{
+    width: 830px;
+    font-size: 65px;
+    color: #F4F4F4;
+    text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.212)
+}
+
+.homesubtitle{
+    width: 730px;
+    font-size: 23px;
+    color: #F4F4F4;
+    text-align: justify;
+    text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.212)
+}
+
+.pokeDexButton{
+    width: 500px;
+    height: 60px;
+    border-radius: 5px;
+    background-color: #FFD11D;
+}
+
+.pokeDexLink{
+    text-decoration: none;
+    font-size: 26px;
+    color: black;
+}
+
+.pokeballHome{
+    filter: drop-shadow(50px 25px 10px rgba(0, 0, 0, 0.180));
+    animation: rotation 3s linear infinite;
+    transform-origin: 50% 50%;
+}
+
+@keyframes rotation {
+    0% {
+      transform: rotate(0deg) translate(0, 20px);
+    }
+    50% {
+      transform: rotate(10deg) translate(0, 0);
+    }
+    100% {
+      transform: rotate(0deg) translate(0, 20px); 
+    }
+}
+
+#pokeListCard{
+    background-color: #151515;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    padding: 60px;
+    width: 1250px;
+    height: 1000px;
+    border-radius: 50px;
+}
+
+.contentTitle{
+    width: 100%;
+    color: #F4F4F4;
+    margin-bottom: 20px;
+}
+
+.pokeListContent{
+    display: grid;
+    grid-template: 280px / auto auto auto auto auto;
+    grid-gap: 30px;
+    flex-flow: wrap;
+    width: 1100px;
+    height: 850px;
+    overflow-y: scroll;
+}
+
+.pokeListContent::-webkit-scrollbar{
+    
+    width: 12px;
+    background: #151515;
+}
+
+.pokeListContent::-webkit-scrollbar-track{
+    background: none;
+    border-radius: 12px;
+}
+
+.pokeListContent::-webkit-scrollbar-thumb{
+    background: #AB0202;
+    border-radius: 6px;
+}
+
+.pokeList{
+    display: flex;
+    flex-flow: column;
+    margin-top: 5px;
+    margin-bottom: 30px;
+}
+
+.pokemonNumber{
+    color: #F4F4F4;
+    font-size: 23px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.pokemonImg{
+    width: 150px;
+    height: 150px;
+    border-radius: 20px;
+}
+
+.pokemonName{
+    color: #F4F4F4;
+    font-size: 23px;
+    font-weight: 600
+}
+
+.pokemonClass{
+    color: #F4F4F4;
+    font-size: 18px;
+}
+
+.pokemonType{
+    color: #F4F4F4;
+    font-size: 16px;
+}
+
+.pokemonCP{
+    color: #F4F4F4;
+    font-size: 22px;
+    font-weight: 600
+}
