@@ -6,6 +6,7 @@ import { SignUpPage } from './components/register/signupPage';
 import Root from './components';
 import ErrorPage from './components/alternatives/errorPage';
 import { Home } from './components/screens/home';
+import { PokeDex } from './components/screens/pokedex';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,11 @@ const router = createBrowserRouter([
   {
     path: "/home",
     element: <Home />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/pokedex",
+    element: <PokeDex />,
     errorElement: <ErrorPage />,
   },
 ]);
