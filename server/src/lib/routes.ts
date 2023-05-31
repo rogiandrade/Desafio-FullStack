@@ -146,7 +146,7 @@ export async function appRoutes(app: FastifyInstance) {
     reply.send({ message: 'User logged in successfully', token });
   });
 
-  app.get('/users', async (request , reply: FastifyReply) => {
+  app.get('/users', async (request, reply: FastifyReply) => {
     try {
       const authHeader = request.headers.authorization;
       if (!authHeader) {
@@ -173,30 +173,33 @@ export async function appRoutes(app: FastifyInstance) {
       console.error('Error fetching user:', error);
       reply.status(500).send({ message: 'Error fetching user' });
     }
-  }); 
+  });
 
   // API routes
   const { request } = require('graphql-request')
 
   const query = `
   query {
-    pokemons(first: 50) {
-      id
+    pokemons(first: 151) {
       name
       image
+      number
+      classification
+      types
+      maxCP
     }
   }
 `
 
   app.get('/pokemons', async (req, res) => {
     try {
-      const data = await request('https://graphql-pokemon2.vercel.app/', query)
-      res.send(data)
+      const data = await request('https://graphql-pokemon2.vercel.app/', query);
+      res.header('Content-Type', 'application/json').send(data);
     } catch (error) {
-      console.error(error)
-      res.send(error)
+      console.error(error);
+      res.send(error);
     }
-  })
+  });
 
 }
 
