@@ -12,10 +12,12 @@
   "dependencies": {
     "@fastify/cors": "^8.2.1",
     "@prisma/client": "^4.13.0",
+    "axios": "^1.4.0",
     "fastify": "^4.17.0",
     "fastify-reply-from": "^6.7.0",
     "graphql-request": "^6.0.0",
-    "jsonwebtoken": "^9.0.0"
+    "jsonwebtoken": "^9.0.0",
+    "node-fetch": "^3.3.1"
   },
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^10.1.0",

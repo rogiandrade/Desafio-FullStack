@@ -109,6 +109,11 @@ a{
     height: 60px;
     border-radius: 5px;
     background-color: #FFD11D;
+    transition: 0.5s;
+}
+
+.pokeDexButton:hover{
+    background-color: #EBC11A;
 }
 
 .pokeDexLink{

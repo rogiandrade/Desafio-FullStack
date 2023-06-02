@@ -117,14 +117,15 @@ export function Home() {
           <p className='homesubtitle'>
             Here you can check a list with all the pokemons in this beautiful world and you can even have your customized pokedex.
           </p>
-          <button
-            className='pokeDexButton'
-          >
-            <a
-              className="pokeDexLink"
-              href={`http://127.0.0.1:5173/pokedex`}>Create a PokeDex!
-            </a>
-          </button>
+          <a
+            className="pokeDexLink"
+            href={`http://127.0.0.1:5173/pokedex`}>
+            <button
+              className='pokeDexButton'
+            >
+              Create a PokeDex!
+            </button>
+          </a>
         </div>
         <img className='pokeballHome' src={pokeballHome} alt="pokeball" width={500} />
       </div>

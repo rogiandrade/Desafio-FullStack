@@ -2,12 +2,15 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken';
 import { prisma } from "./prisma";
 import { z } from "zod";
+import axios from "axios";
 
 declare module "fastify" {
   interface FastifyRequest {
     user?: { userId: string };
   }
 }
+
+const fetch = require('node-fetch');
 
 // Armazene os tokens inválidos em uma lista negra (blacklist)
 const invalidTokens: string[] = [];
@@ -200,6 +203,43 @@ export async function appRoutes(app: FastifyInstance) {
       res.send(error);
     }
   });
+
+  app.get('/favorite/pokemon/:name', async (request: FastifyRequest<{ Params: { name: string } }>, reply) => {
+    const { name } = request.params;
+  
+    try {
+        const query = `
+          query {
+            pokemon(name: "${name}") {
+              name
+              image
+              classification
+              types
+              resistant
+              maxCP
+              height {
+                minimum
+                maximum
+              }
+              weight {
+                minimum
+                maximum
+              }
+            }
+          }
+        `;
+        const response = await axios.get(`https://graphql-pokemon2.vercel.app/?query=${encodeURIComponent(query)}`);
+        const { data } = response.data;
+        const pokemon = data.pokemon;
+  
+        return {
+            data: pokemon
+        };
+    } catch (error) {
+        console.error('Error fetching pokemon:', error);
+        reply.status(500).send('Error fetching pokemon');
+    }
+});
 
 }
 

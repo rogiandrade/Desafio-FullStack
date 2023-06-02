@@ -1,0 +1,145 @@
+.pokeDex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    width: 100vw;
+    height: 100vh;
+}
+
+.buttonStart{
+    width: 500px;
+    height: 60px;
+    border-radius: 5px;
+    background-color: #FFD11D;
+    transition: 0.5s;
+}
+
+.buttonStart:hover{
+    background-color: #EBC11A;
+}
+
+
+.dialogContent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: wrap;
+    position: fixed;
+    top: 280px;
+    left: 400px;
+    width: 900px;
+    height: 300px;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.111);
+}
+
+.dialogTitle{
+    text-align: center;
+    width: 100%;
+    font-size: 30px;
+    font-weight:600;
+}
+
+.Avatares{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    height: 110px;
+}
+
+.Avatar{
+    width: 100px;
+    height: 100px;
+    border: 3px solid #000000;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.Avatar:hover{
+    opacity: 75%;
+}
+
+.hovercardContent{
+    width: 300px;
+    height: 330px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px -10px 10px rgba(0, 0, 0, 0.111);
+    animation-duration: 400ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hovercardArrow{
+    fill: white;
+}
+
+.Name{
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.Class{
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.Type{
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.maxCP{
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.Height{
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.Weight{
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.buttonSave{
+    width: 300px;
+    height: 60px;
+    border-radius: 5px;
+    background-color: #E3E3E3;
+    border: 2px solid #000000;
+    margin-top: 0;
+    transition: 0.5s;
+}
+
+.buttonSave:hover{
+    opacity: 75%;
+}
+
+.IconButton {
+    font-family: inherit;
+    border-radius: 100%;
+    border: none;
+    height: 30px;
+    width: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    position: absolute;
+    margin-top: 0;
+    top: 20px;
+    right: 40px;
+  }
+
+.IconButton:hover {
+    opacity: 70%;
+}
+  
