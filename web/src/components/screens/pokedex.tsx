@@ -1,9 +1,11 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import * as HoverCard from '@radix-ui/react-hover-card';
+import * as Avatar from '@radix-ui/react-avatar';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import pikachuFace from '../../styles/assets/pikachuFace.png'
 import { useEffect, useState } from 'react';
 import { api } from '../../lib/axios';
+
 
 type Pokemon = {
   name: string;
@@ -53,7 +55,7 @@ export function PokeDex() {
     <Dialog.Root>
       <Dialog.Trigger asChild>
         <button className="buttonStart">
-          Let's start!
+          Gotta catch 'em all!
         </button>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -65,13 +67,15 @@ export function PokeDex() {
 
             <HoverCard.Root>
               <HoverCard.Trigger asChild>
-                <div onClick={() => loadPokemonData('Pikachu', setPikachu)}>
+                <Avatar.Root>
                   {pikachu ? (
-                    <img className='Avatar' src={pikachu.image} alt="Pikachu" />
+                    <Avatar.Image className='Avatar' src={pikachu.image} alt="Pikachu" />
                   ) : (
-                    <span>Pikachu</span>
+                    <Avatar.Fallback className="AvatarFallback" delayMs={600}>
+                      PK
+                    </Avatar.Fallback>
                   )}
-                </div>
+                </Avatar.Root>
               </HoverCard.Trigger>
               <HoverCard.Portal>
                 <HoverCard.Content
@@ -102,13 +106,15 @@ export function PokeDex() {
             </HoverCard.Root>
             <HoverCard.Root>
               <HoverCard.Trigger asChild>
-                <div onClick={() => loadPokemonData('Bulbasaur', setBulbasaur)}>
+                <Avatar.Root>
                   {bulbasaur ? (
-                    <img className='Avatar' src={bulbasaur.image} alt="Bulbasaur" />
+                    <Avatar.Image className='Avatar' src={bulbasaur.image} alt="Bulbasaur" />
                   ) : (
-                    <span>Bulbasaur</span>
+                    <Avatar.Fallback className="AvatarFallback" delayMs={600}>
+                      BB
+                    </Avatar.Fallback>
                   )}
-                </div>
+                </Avatar.Root>
               </HoverCard.Trigger>
               <HoverCard.Portal>
                 <HoverCard.Content
@@ -139,13 +145,15 @@ export function PokeDex() {
             </HoverCard.Root>
             <HoverCard.Root>
               <HoverCard.Trigger asChild>
-                <div onClick={() => loadPokemonData('Squirtle', setBulbasaur)}>
+                <Avatar.Root>
                   {squirtle ? (
-                    <img className='Avatar' src={squirtle.image} alt="Squirtle" />
+                    <Avatar.Image className='Avatar' src={squirtle.image} alt="Squirtle" />
                   ) : (
-                    <span>Squirtle</span>
+                    <Avatar.Fallback className="AvatarFallback" delayMs={600}>
+                      SQ
+                    </Avatar.Fallback>
                   )}
-                </div>
+                </Avatar.Root>
               </HoverCard.Trigger>
               <HoverCard.Portal>
                 <HoverCard.Content
@@ -176,13 +184,15 @@ export function PokeDex() {
             </HoverCard.Root>
             <HoverCard.Root>
               <HoverCard.Trigger asChild>
-                <div onClick={() => loadPokemonData('Charmander', setCharmander)}>
+                <Avatar.Root>
                   {charmander ? (
-                    <img className='Avatar' src={charmander.image} alt="Charmander" />
+                    <Avatar.Image className='Avatar' src={charmander.image} alt="Charmander" />
                   ) : (
-                    <span>Charmander</span>
+                    <Avatar.Fallback className="AvatarFallback" delayMs={600}>
+                      CM
+                    </Avatar.Fallback>
                   )}
-                </div>
+                </Avatar.Root>
               </HoverCard.Trigger>
               <HoverCard.Portal>
                 <HoverCard.Content
@@ -213,13 +223,15 @@ export function PokeDex() {
             </HoverCard.Root>
             <HoverCard.Root>
               <HoverCard.Trigger asChild>
-                <div onClick={() => loadPokemonData('Mew', setMew)}>
+                <Avatar.Root>
                   {mew ? (
-                    <img className='Avatar' src={mew.image} alt="Mew" />
+                    <Avatar.Image className='Avatar' src={mew.image} alt="Mew" />
                   ) : (
-                    <span>Mew</span>
+                    <Avatar.Fallback className="AvatarFallback" delayMs={600}>
+                      Mew
+                    </Avatar.Fallback>
                   )}
-                </div>
+                </Avatar.Root>
               </HoverCard.Trigger>
               <HoverCard.Portal>
                 <HoverCard.Content
